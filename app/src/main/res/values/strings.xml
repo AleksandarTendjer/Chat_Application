@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">ChatApplication</string>
+    <string name="LoginStr">LOG IN</string>
+    <string name="registerStr">REGISTER</string>
+    <string name="FirstNameHint">First Name</string>
+    <string name="LastHint">Last Name</string>
+    <string name="Allow">Accept Notifications</string>
+    <string name="Password1">Password</string>
+    <string name="gender">gender:</string>
+    <string name="Username1">Username</string>
+    <string name="Birth">Birth day:</string>
+    <string name="LogoutStr">Log out</string>
+    <string name="contactView">Pera Peric</string>
+    <string name="logoutString">LOG OUT</string>
+    <string name="MsgTxt">message text</string>
+    <string name="SendBtnTxt">send</string>
+    <string name="EmailAdrrStr">your e-mail</string>
+    <string-array name="GenderList">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+</resources>
