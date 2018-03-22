@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -61,10 +62,14 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         switch(view.getId()) {
             case R.id.LogoutBtnMsg:
                 intentMessageMain=new Intent(this,MainActivity.class);
+                startActivity(intentMessageMain);
                 finish();
                 break;
             case R.id.SendBtn:
-                Toast.makeText(this,str, Toast.LENGTH_LONG).show();
+               Toast toast= Toast.makeText(this,str, Toast.LENGTH_LONG);
+               toast.setGravity(Gravity.CENTER,0,0);
+               toast.show();
+
 
 
         }
