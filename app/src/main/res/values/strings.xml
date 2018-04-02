@@ -15,6 +15,15 @@
     <string name="MsgTxt">message text</string>
     <string name="SendBtnTxt">send</string>
     <string name="EmailAdrrStr">your e-mail</string>
+    <string name="FirstLetter">a</string>
+    <string name="randomname">Marko Markovic</string>
+    <string name="hello">hello</string>
+    <string name="my_cht_list">Contacts List:</string>
+    <string name="message1">What are you doing?</string>
+    <string name="message2">Playing video games,you?:)</string>
+    <string name="message3">Woow,me too,lets play together.</string>
+    <string name="message4">We could my friend.</string>
+    <string name="rndmsg">Hello</string>
     <string-array name="GenderList">
         <item>Male</item>
         <item>Female</item>
