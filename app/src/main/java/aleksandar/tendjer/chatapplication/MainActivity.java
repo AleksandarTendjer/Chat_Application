@@ -1,6 +1,8 @@
 package aleksandar.tendjer.chatapplication;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -8,13 +10,18 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
+
+import java.util.prefs.Preferences;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private  Button login,register;
     private EditText password,username;
     Intent intentMainReg,intentMainContacts;
+
+    DbHelper database;
 
 
     void Check() {
@@ -57,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         register.setOnClickListener(this);
         login.setOnClickListener(this);
+        database=new DbHelper(this);
 
     }
 
@@ -67,11 +75,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                      intentMainReg = new Intent(this, RegisterActivity.class);
                     startActivity(intentMainReg);
                     break;
+
                 case (R.id.LoginBtnMain):
-                    intentMainContacts = new Intent(this, ContactsActivity.class);
+                    Contact contact=database.search(username.getText().toString());
+                    if(contact==null) {
+                        Toast.makeText(getApplicationContext(), R.string.nameNotExist, Toast.LENGTH_LONG).show();
+                    }
+                    else {
+
+                        intentMainContacts = new Intent(this, ContactsActivity.class);
+                        //change the preferences with editor
+                        SharedPreferences sharedPreff=getSharedPreferences("currentUser", MODE_PRIVATE);
+                        SharedPreferences.Editor editor=sharedPreff.edit();
+                        editor.putLong("userId", contact.getContactId());
+                        editor.apply();
                         startActivity(intentMainContacts);
                         finish();
-
+                    }
                     break;
             }
         }

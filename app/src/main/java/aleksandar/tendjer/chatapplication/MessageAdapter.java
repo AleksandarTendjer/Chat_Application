@@ -1,16 +1,15 @@
 package aleksandar.tendjer.chatapplication;
 
-import android.app.Notification;
+
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.SharedPreferences;
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -23,14 +22,20 @@ import java.util.Random;
 public class MessageAdapter extends BaseAdapter {
 
     private Context mContext;
-    private ArrayList<Messages> messageList;
+    private ArrayList<Message> messageList;
+    private long userId;
 
     public MessageAdapter(Context context) {
         mContext = context;
-        messageList = new ArrayList<Messages>();
+        messageList = new ArrayList<Message>();
+        SharedPreferences settings = mContext.getSharedPreferences("currentUser", 0);
+        this.userId = settings.getLong("userId", -1);
+        if (this.userId == -1) {
+            mContext.startActivity(new Intent(mContext, MainActivity.class));
+        }
     }
 
-    public void AddMessages(Messages mesg) {
+    public void AddMessage(Message mesg) {
         this.messageList.add(mesg);
         notifyDataSetChanged();
     }
@@ -46,6 +51,15 @@ public class MessageAdapter extends BaseAdapter {
 
 
         return messageList.get(position);
+    }
+    public void update(Message[]msgs) {
+        messageList.clear();
+        if (msgs != null) {
+            for (Message message : msgs) {
+                messageList.add(message);
+            }
+        }
+        notifyDataSetChanged();
     }
 
     @Override
@@ -81,9 +95,9 @@ public class MessageAdapter extends BaseAdapter {
                 holder.message.setGravity(Gravity.RIGHT);
             }
         }
-        Messages currMesg = (Messages) getItem(position);
+        Message currMesg = (Message) getItem(position);
         final ViewHolder holder = (ViewHolder) view.getTag();
-        holder.message.setText(currMesg.text);
+        holder.message.setText(currMesg.getText());
 
         return view;
     }

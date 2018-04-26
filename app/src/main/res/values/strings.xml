@@ -24,6 +24,9 @@
     <string name="message3">Woow,me too,lets play together.</string>
     <string name="message4">We could my friend.</string>
     <string name="rndmsg">Hello</string>
+    <string name="nameExist">The username you have entered alredy exists</string>
+    <string name="nameNotExist">The username you have entered does not exist</string>
+    <string name="bundleproblem">Problem loading bundle!</string>
     <string-array name="GenderList">
         <item>Male</item>
         <item>Female</item>

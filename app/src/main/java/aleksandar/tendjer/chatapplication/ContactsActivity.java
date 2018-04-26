@@ -1,6 +1,8 @@
 package aleksandar.tendjer.chatapplication;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
@@ -15,42 +17,40 @@ import java.util.Random;
 public class ContactsActivity extends AppCompatActivity implements View.OnClickListener {
     private Button logout;
     private TextView contact;
-    public String name1,name2,name3,name4,name5;
     Drawable image;
     Intent intentContactMain;
+    DbHelper database;
+    private Long loggedUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
-
+        ListView contactList = (ListView) findViewById(R.id.contact_list);
         logout=findViewById(R.id.LogoutBtn);
         logout.setOnClickListener(this);
 
-         name1="Marko Markovic";
-         name2="Janko Markovic";
-         name3="Stanko Markovic";
-         name4="Ivan Ivanovic";
-         name5="Pera Peric";
-         //get the arrow from dresources folder
+        //get the arrow from dresources folder
         image=getResources().getDrawable(R.drawable.arrow2);
+
+
+
+        SharedPreferences preffs=this.getSharedPreferences("currentUser",MODE_PRIVATE);
+        loggedUser=preffs.getLong("userId",-1);
+        if(loggedUser==-1)
+            startActivity(new Intent(ContactsActivity.this, MainActivity.class));
+
         ContactsAdapter adapter=new ContactsAdapter(this);
+        database=new DbHelper(this);
+        // read contacts and add to   a adapter
+        Contact[] contacts=database.ReadContacts();
+        if(contacts!=null)
+            for (Contact contact:contacts)
+                adapter.addContacts(contact);
 
-        Contact c1=new Contact(name1,image);
-        Contact c2=new Contact(name2,image);
-        Contact c3=new Contact(name3,image);
-        Contact c4=new Contact(name4,image);
-        Contact c5=new Contact(name5,image);
-
-        //adding dummy contacts to list
-        adapter.addContacts(c1);
-        adapter.addContacts(c2);
-        adapter.addContacts(c3);
-        adapter.addContacts(c4);
-        adapter.addContacts(c5);
-        //appending the created adapter to a xml
-        ListView contactList = (ListView) findViewById(R.id.contact_list);
+        adapter.SetArrow(image);
         contactList.setAdapter(adapter);
-        //ima adapter samo ga ne prikazuje..
+
+
     }
 
     @Override
@@ -58,6 +58,10 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
         //svitchuj u odnosu na selektovani id i prebaci se na drugi activity
         switch(view.getId()) {
             case R.id.LogoutBtn:
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("currentUser", MODE_PRIVATE);
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putLong("userId", -1);
+                editor.commit();
                 intentContactMain= new Intent(this, MainActivity.class);
                 startActivity(intentContactMain);
                 finish();

@@ -3,6 +3,8 @@ package aleksandar.tendjer.chatapplication;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,7 +33,18 @@ public class ContactsAdapter extends BaseAdapter {
         this.mContacts.add(contacts);
         notifyDataSetChanged();
     }
+    //setting arrow for all elements of adapter list
+    public void SetArrow(Drawable image)
+    {
+        if(mContacts==null)
+            if(!mContacts.isEmpty())
+               for(Contact contact : mContacts)
+               {
+                   //how to set arrow
+                   contact.setArrow(image);
 
+               }
+    }
 
     @Override
     public int getCount() {
@@ -66,11 +79,12 @@ public class ContactsAdapter extends BaseAdapter {
             holder.firstLetter.setBackgroundColor(color);
         }
 
-        Contact contacts = (Contact) getItem(position);
-        String firstLetter = contacts.contactName.charAt(0) + "";
+        final Contact contacts = (Contact) getItem(position);
+
+        String firstLetter = contacts.Concat().charAt(0) + "";
         final ViewHolder holder = (ViewHolder) view.getTag();
-        holder.name.setText(contacts.contactName);
-        holder.arrow.setImageDrawable(contacts.arrow);
+        holder.name.setText(contacts.Concat());
+        holder.arrow.setImageDrawable(contacts.getArrow());
         holder.firstLetter.setText(firstLetter);
 
         holder.arrow.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +93,8 @@ public class ContactsAdapter extends BaseAdapter {
                 Intent goToMessage = new Intent(parent.getContext(), MessageActivity.class);
 
                 Bundle contactBundle=new Bundle();
-                contactBundle.putString("Name",holder.name.getText().toString());
+                contactBundle.putString("receiverName",holder.name.getText().toString());
+                contactBundle.putLong("receiverId",contacts.getContactId());
                 goToMessage.putExtras(contactBundle);
                 parent.getContext().startActivity(goToMessage);
             }

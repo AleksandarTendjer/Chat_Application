@@ -9,11 +9,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener   {
     private Button register;
-    private EditText username,password,email;
+    private EditText username,password,email,firstName,lastName;
     DatePicker calendar;
+    DbHelper database;
 
     Intent intetntRegisterContacts;
     TextWatcher TxtWatcher=new TextWatcher() {
@@ -48,9 +50,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         register=findViewById(R.id.RegistBtns);
+        database = new DbHelper(this);
         username=findViewById(R.id.UsernameRegister);
         password=findViewById(R.id.PasswordRegister);
         email=findViewById(R.id.EditEmail);
+        firstName=findViewById(R.id.EditFirst);
+        lastName=findViewById(R.id.EditLast);
 
         register.setEnabled(false);
         username.addTextChangedListener(TxtWatcher);
@@ -66,10 +71,26 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.RegistBtns:
-                 intetntRegisterContacts = new Intent(this, ContactsActivity.class);
-                startActivity(intetntRegisterContacts);
-                finish();
+                //if name not found in the database you can make one
+                if(database.search(username.getText().toString())==null) {
+                    Contact contact=new Contact(username.getText().toString(),firstName.getText().toString(),lastName.getText().toString(),0);
+                    database.insertContact(contact);
+                    intetntRegisterContacts = new Intent(this, MainActivity.class);
+                    startActivity(intetntRegisterContacts);
+                    intetntRegisterContacts.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    finish();
+                }
+                //else show toast and do nothing
+                else {
+                    Toast.makeText(getApplicationContext(),R.string.nameExist,Toast.LENGTH_LONG).show();
+                }
                 break;
+                /*************************************/
+//                 intetntRegisterContacts = new Intent(this, ContactsActivity.class);
+//                startActivity(intetntRegisterContacts);
+//                intetntRegisterContacts.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                finish();
+//                break;
         }
     }
 
